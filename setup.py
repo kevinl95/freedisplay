@@ -3,6 +3,8 @@ from cx_Freeze import setup, Executable
 import os.path
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
+os.environ["TCL_LIBRARY"] = os.path.join(PYTHON_INSTALL_DIR, "tcl", "tcl8.6")
+os.environ["TK_LIBRARY"] = os.path.join(PYTHON_INSTALL_DIR, "tcl", "tk8.6")
 
 # Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {
@@ -11,6 +13,8 @@ build_exe_options = {
     "include_files": [
         "static",
         "templates",
+        os.path.join(PYTHON_INSTALL_DIR, "DLLs", "tk86t.dll"),
+        os.path.join(PYTHON_INSTALL_DIR, "DLLs", "tcl86t.dll"),
     ],
 }
 
@@ -21,7 +25,13 @@ setup(
     version="1.0",
     description="Share your screen over your local network!",
     author="Kevin Loeffler",
-    targetName="freedisplay.app",
     options={"build_exe": build_exe_options},
-    executables=[Executable("main.py", base=base, icon = 'images/displayicon.icns')],
+    executables=[
+        Executable(
+            "main.py",
+            base=base,
+            icon="images/displayicon.ico",
+            targetName="freedisplay.exe",
+        )
+    ],
 )
