@@ -11,10 +11,8 @@ pillow = "*"
 numpy = "*"
 opencv-python = "*"
 qrcode = "*"
-black = "*"
 mss = "*"
 cx-freeze = "*"
-pathos = "*"
 
 [requires]
 python_version = "3.6"
