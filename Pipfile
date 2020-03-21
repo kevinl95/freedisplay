@@ -7,7 +7,6 @@ verify_ssl = true
 
 [packages]
 flask = "*"
-pyinstaller = "*"
 pillow = "*"
 numpy = "*"
 opencv-python = "*"
@@ -15,6 +14,7 @@ qrcode = "*"
 eventlet = "*"
 black = "*"
 mss = "*"
+pyinstaller = "==3.3"
 
 [requires]
 python_version = "3.6"

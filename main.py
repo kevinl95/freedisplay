@@ -10,7 +10,6 @@ from multiprocessing import Process, Value
 from mss import mss
 from PIL import Image
 from flask import Flask, render_template, jsonify
-from gooey import Gooey
 
 IMAGE_FOLDER = os.path.join("static", "screenimgs")
 app = Flask(__name__)
