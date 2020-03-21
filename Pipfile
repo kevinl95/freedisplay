@@ -12,6 +12,9 @@ pyinstaller = "*"
 pillow = "*"
 numpy = "*"
 opencv-python = "*"
+qrcode = "*"
+eventlet = "*"
+black = "*"
 
 [requires]
 python_version = "3.6"
