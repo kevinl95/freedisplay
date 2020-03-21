@@ -11,10 +11,10 @@ pillow = "*"
 numpy = "*"
 opencv-python = "*"
 qrcode = "*"
-eventlet = "*"
 black = "*"
 mss = "*"
-pyinstaller = "*"
+cx-freeze = "*"
+pathos = "*"
 
 [requires]
 python_version = "3.6"
