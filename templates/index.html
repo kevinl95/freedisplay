@@ -5,7 +5,24 @@
   <title>FreeDisplay</title>
 </head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type=text/javascript> setInterval(function() { var myImageElement=document.getElementById('capture'); myImageElement.src='static/screenimgs/current.png?rand=' + Math.random(); }, 500); </script>
+<script type=text/javascript> setInterval(function() { var myImageElement=document.getElementById('capture'); myImageElement.src='static/screenimgs/current.png?rand=' + Math.random(); }, 1000);
+
+self.addEventListener('fetch', (e) => {
+    e.respondWith(
+        fetch(e.request)
+            .then((response) => {
+                if (response.ok) return response;
+
+                // User is online, but response was not ok
+                if (isImage(e.request)) {
+                    // Fetch the broken image placeholder instead
+                    return fetch('static/screenimgs/redundant.png?rand=' + Math.random());
+                }
+
+            })
+    )
+});
+</script>
 <body>
   <img id='capture' src="{{ user_image }}" alt="User Image">
 </body>

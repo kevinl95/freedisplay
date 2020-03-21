@@ -16,6 +16,7 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = IMAGE_FOLDER
 
 full_filename = os.path.join(app.config["UPLOAD_FOLDER"], "current.png")
+redundant_filename = os.path.join(app.config["UPLOAD_FOLDER"], "redundant.png")
 
 
 @app.route("/")
@@ -36,6 +37,7 @@ def capture():
         tp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
         img.save(tp.name)
         shutil.copy(tp.name, os.path.join(os.getcwd(), full_filename))
+        shutil.copy(tp.name, os.path.join(os.getcwd(), redundant_filename))
         tp.close()
 
 
