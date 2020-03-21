@@ -14,7 +14,7 @@ qrcode = "*"
 eventlet = "*"
 black = "*"
 mss = "*"
-pyinstaller = "==3.3"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.6"
