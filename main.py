@@ -10,6 +10,7 @@ from multiprocessing import Process, Value
 from mss import mss
 from PIL import Image
 from flask import Flask, render_template, jsonify
+from gooey import Gooey
 
 IMAGE_FOLDER = os.path.join("static", "screenimgs")
 app = Flask(__name__)
@@ -18,16 +19,14 @@ app.config["UPLOAD_FOLDER"] = IMAGE_FOLDER
 full_filename = os.path.join(app.config["UPLOAD_FOLDER"], "current.png")
 redundant_filename = os.path.join(app.config["UPLOAD_FOLDER"], "redundant.png")
 
+sct = mss()
+mon = sct.monitors[1]
+
 
 @app.route("/")
 @app.route("/index")
 def show_index():
     return render_template("index.html")
-
-
-sct = mss()
-
-mon = sct.monitors[1]
 
 
 def capture():
@@ -36,8 +35,11 @@ def capture():
         img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
         tp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
         img.save(tp.name)
-        shutil.copy(tp.name, os.path.join(os.getcwd(), full_filename))
-        shutil.copy(tp.name, os.path.join(os.getcwd(), redundant_filename))
+        try:
+            shutil.copy(tp.name, os.path.join(os.getcwd(), full_filename))
+            shutil.copy(tp.name, os.path.join(os.getcwd(), redundant_filename))
+        except OSError:
+            pass
         tp.close()
 
 
@@ -71,6 +73,6 @@ if __name__ == "__main__":
     captureprocess = Process(target=capture)
     captureprocess.start()
     cvprocess.start()
-    app.run(host=localip, debug=True, use_reloader=False)
+    app.run(host=localip, use_reloader=False)
     cvprocess.join()
     captureprocess.join()
