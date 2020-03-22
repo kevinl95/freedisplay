@@ -17,13 +17,18 @@ def capture(upload_folder):
     mon = sct.monitors[1]
     full_filename = os.path.join(upload_folder, "current.png")
     redundant_filename = os.path.join(upload_folder, "redundant.png")
-    while 1:
+    while 1:  # Take a screenshot, then immediately take another
         sct_img = sct.grab(mon)
         img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
         tp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-        img.save(tp.name)
+        img.save(tp.name)  # Save to a temporary file
         try:
+            # Once it's ready begin copying to the displayed image location in
+            # static.
             shutil.copy(tp.name, os.path.join(os.getcwd(), full_filename))
+            # This redundant image fills in if the UI makes a request for an
+            # image and it isn't ready yet, filling in the gap with the
+            # previously seen image.
             shutil.copy(tp.name, os.path.join(os.getcwd(), redundant_filename))
         except OSError:
             pass
@@ -33,7 +38,9 @@ def capture(upload_folder):
 def open_code():
     cv2.startWindowThread()
     cv2.namedWindow("Scan this code to access your display")
-    cv2.imshow("Scan this code to access your display", cv2.imread("displaycode.png"))
+    im = cv2.imread("displaycode.png")
+    imS = cv2.resize(im, (540, 540))
+    cv2.imshow("Scan this code to access your display", imS)
     cv2.waitKey(0)
 
 
@@ -63,16 +70,19 @@ if __name__ == "__main__":
         box_size=15,
         border=4,
     )
+    # Serve at a local public IP
     qr.add_data("http://" + localip + ":5000")
     qr.make(fit=True)
     qrimg = qr.make_image(fill_color="black", back_color="white")
     qrimg.save("displaycode.png")
-    # cvprocess = Process(target=open_code)
-    cvprocess = threading.Thread(target=open_code, args=())
-    cvprocess.start()  # Start the execution
-    # captureprocess = Process(target=capture, args=(app.config["UPLOAD_FOLDER"],))
+    # Capture and the CV window run in seperate threads so that the server
+    # is ready for the user
+    cyprocess = threading.Thread(target=open_code, args=())
+    cyprocess.daemon = True
+    cyprocess.start()  # Start the execution
     captureprocess = threading.Thread(
         target=capture, args=(app.config["UPLOAD_FOLDER"],)
     )
+    captureprocess.daemon = True
     captureprocess.start()
     app.run(host=localip, use_reloader=False, debug=True)
