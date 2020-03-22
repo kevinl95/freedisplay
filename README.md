@@ -2,7 +2,7 @@
 
 ![Android screenshot](android_screenshot.jpg)
 
-FreeDisplay is a free application for mirroring your display to everyone on your local network. People can access a mirror of your screen through their web browser by scanning a QR code that is generated when you start the program, or by typing in the address that is generated in the window when you start mirroring.
+FreeDisplay is a free application for mirroring your display to everyone on your local network (like your home WiFi). People can access a mirror of your screen through their web browser by scanning a QR code that is generated when you start the program, or by typing in the address that is generated in the window when you start mirroring. As long as they share a network with you, they'll see your screen in their web browser of choice for as long as you choose to share!
 
 ![Example QR code screenshot](qr_screenshot.PNG)
 
